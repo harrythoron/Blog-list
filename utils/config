@@ -1,0 +1,9 @@
+require('dotenv').config()
+
+const PORT = 3001
+const urlBlog = process.env.urlBlog
+
+module.exports = {
+    PORT,
+    urlBlog
+}

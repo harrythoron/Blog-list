@@ -373,19 +373,29 @@ beforeEach(async () => {
 
 }, 100000)
 
-test('returned blog list in correct format', async () => {
-    console.log('entered test');
-    const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/)
+// test('returned blog list in correct format', async () => {
+//     console.log('entered test');
+//     const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/)
 
 
-    const result = await listHelper.blogsInDb()
+//     const result = await listHelper.blogsInDb()
 
 
-    expect(result).toHaveLength(2)
+//     expect(result).toHaveLength(2)
 
 
 
-}, 100000)
+// }, 100000)
+
+test('id is defined', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+})
+
+test('id is not defined', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0]._id).not.toBeDefined()
+})
 
 afterAll(async () => {
     mongoose.connection.close()

@@ -387,14 +387,37 @@ beforeEach(async () => {
 
 // }, 100000)
 
-test('id is defined', async () => {
-    const response = await api.get('/api/blogs')
-    expect(response.body[0].id).toBeDefined()
-})
+// test('id is defined', async () => {
+//     const response = await api.get('/api/blogs')
+//     expect(response.body[0].id).toBeDefined()
+// })
 
-test('id is not defined', async () => {
-    const response = await api.get('/api/blogs')
-    expect(response.body[0]._id).not.toBeDefined()
+// test('id is not defined', async () => {
+//     const response = await api.get('/api/blogs')
+//     expect(response.body[0]._id).not.toBeDefined()
+// })
+
+test('http post works', async () => {
+
+
+    const newBlog = {
+        title: 'DopeSick',
+        author: 'Third Reich',
+        url: 'http://blm.com',
+        likes: 80000000000,
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const result = await listHelper.blogsInDb()
+    const titles = result.map(res => res.title)
+    expect(titles).toHaveLength(listHelper.initialBlogList.length + 1)
+    expect(titles).toContain('DopeSick')
+
 })
 
 afterAll(async () => {

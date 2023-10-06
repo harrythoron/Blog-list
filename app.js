@@ -8,8 +8,8 @@ const blogRouter = require('./controller/blogsRouter')
 
 
 
-
-mongoose.connect(config.urlBlog)
+console.log('connecting to', config.urlBlog);
+mongoose.connect(config.urlBlog).then(res => console.log('connected to mongodb'))
 
 app.use(cors())
 app.use(express.json())

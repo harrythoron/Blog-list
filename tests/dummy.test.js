@@ -397,14 +397,35 @@ beforeEach(async () => {
 //     expect(response.body[0]._id).not.toBeDefined()
 // })
 
-test('http post works', async () => {
+// test('http post works', async () => {
 
 
+//     const newBlog = {
+//         title: 'DopeSick',
+//         author: 'Third Reich',
+//         url: 'http://blm.com',
+//         likes: 80000000000,
+//     }
+
+//     await api
+//         .post('/api/blogs')
+//         .send(newBlog)
+//         .expect(201)
+//         .expect('Content-Type', /application\/json/)
+
+//     const result = await listHelper.blogsInDb()
+//     const titles = result.map(res => res.title)
+//     expect(titles).toHaveLength(listHelper.initialBlogList.length + 1)
+//     expect(titles).toContain('DopeSick')
+
+// })
+
+test('if no likes is given', async () => {
     const newBlog = {
         title: 'DopeSick',
         author: 'Third Reich',
         url: 'http://blm.com',
-        likes: 80000000000,
+
     }
 
     await api
@@ -414,10 +435,8 @@ test('http post works', async () => {
         .expect('Content-Type', /application\/json/)
 
     const result = await listHelper.blogsInDb()
-    const titles = result.map(res => res.title)
-    expect(titles).toHaveLength(listHelper.initialBlogList.length + 1)
-    expect(titles).toContain('DopeSick')
-
+    const latestBlog = result.find(res => res.title === 'DopeSick')
+    expect(latestBlog.likes).toBe(0)
 })
 
 afterAll(async () => {

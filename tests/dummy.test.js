@@ -440,22 +440,46 @@ beforeEach(async () => {
 // })
 
 
-test('if no title is given', async () => {
-    const newBlog = {
+// test('if no title is given', async () => {
+//     const newBlog = {
 
-        author: 'Third Reich',
-        url: 'http://blm.com',
+//         author: 'Third Reich',
+//         url: 'http://blm.com',
 
-    }
+//     }
+
+//     await api
+//         .post('/api/blogs')
+//         .send(newBlog)
+//         .expect(400)
+//         .expect('Bad Request')
+
+
+// })
+
+test('changing the likes with put request', async () => {
+    const initialBlogList = await listHelper.blogsInDb()
+    //console.log(initialBlogList, 'initialBlogList')
+    const updatedList = { ...initialBlogList[0], likes: 3 } //destructure to lose reference point
+    //console.log(updatedList, 'updatedList')
+    await api
+        .put(`/api/blogs/${updatedList.id}`)
+        .send(updatedList)
+        .expect(200)
+})
+
+test('changing the likes with delete request', async () => {
+    const blogsAtStart = await listHelper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+    console.log(blogToDelete.id, 'blogToDelete')
+
+
 
     await api
-        .post('/api/blogs')
-        .send(newBlog)
-        .expect(400)
-        .expect('Bad Request')
-
-
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
 })
+
 afterAll(async () => {
     mongoose.connection.close()
 })

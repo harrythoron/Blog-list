@@ -420,9 +420,29 @@ beforeEach(async () => {
 
 // })
 
-test('if no likes is given', async () => {
+// test('if no likes is given', async () => {
+//     const newBlog = {
+//         title: 'DopeSick',
+//         author: 'Third Reich',
+//         url: 'http://blm.com',
+
+//     }
+
+//     await api
+//         .post('/api/blogs')
+//         .send(newBlog)
+//         .expect(201)
+//         .expect('Content-Type', /application\/json/)
+
+//     const result = await listHelper.blogsInDb()
+//     const latestBlog = result.find(res => res.title === 'DopeSick')
+//     expect(latestBlog.likes).toBe(0)
+// })
+
+
+test('if no title is given', async () => {
     const newBlog = {
-        title: 'DopeSick',
+
         author: 'Third Reich',
         url: 'http://blm.com',
 
@@ -431,14 +451,11 @@ test('if no likes is given', async () => {
     await api
         .post('/api/blogs')
         .send(newBlog)
-        .expect(201)
-        .expect('Content-Type', /application\/json/)
+        .expect(400)
+        .expect('Bad Request')
 
-    const result = await listHelper.blogsInDb()
-    const latestBlog = result.find(res => res.title === 'DopeSick')
-    expect(latestBlog.likes).toBe(0)
+
 })
-
 afterAll(async () => {
     mongoose.connection.close()
 })

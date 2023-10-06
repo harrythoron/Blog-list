@@ -14,6 +14,10 @@ blogRouter.post('/', (request, response) => {
     if (body.likes === undefined) {
         body.likes = 0
     }
+
+    if (body.title === undefined || body.url === undefined) {
+        return response.status(400).send('Bad Request')
+    }
     const blog = new Blog(request.body)
 
 

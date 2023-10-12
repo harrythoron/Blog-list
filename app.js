@@ -16,6 +16,7 @@ const middleware = require('./utils/middleware')
 console.log('connecting to', config.urlBlog);
 mongoose.connect(config.urlBlog).then(res => console.log('connected to mongodb'))
 app.use(middleware.getToken)
+app.use(middleware.userExtractor)
 app.use(cors())
 app.use(express.json())
 

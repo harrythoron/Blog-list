@@ -16,12 +16,12 @@ blogRouter.get('/', async (request, response) => {
 blogRouter.post('/', async (request, response) => {
     const body = request.body
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    console.log(decodedToken, 'decodedToken from blogRouter');
-    if (!decodedToken.id) {
+    const user = request.user
+    console.log(user, 'user from blogRouter');
+    if (!user) {
         return response.status(401).json({ error: 'token invalid' })
     }
-    const user = await User.findById(decodedToken.id)
+
 
 
     console.log(user.id, '   user in blogsrouter')
@@ -67,16 +67,15 @@ blogRouter.put('/:id', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
     const blog = await Blog.findById(request.params.id)
-    // console.log(blog, 'blog to be deleted')
 
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    // console.log(decodedToken, 'decodedToken to be deleted')
-    if (!decodedToken.id) {
+    const user = request.user
+    console.log(user, 'user in delete blog router')
+    if (!user) {
         return response.status(401).json({ error: 'token invalid' })
     }
     //check if the user that created the note is deleting it
-    if (blog.user.toString() === decodedToken.id) {
-        // console.log('true to delete')
+    if (blog.user.toString() === user.id) {
+        console.log('true to delete')
         await Blog.findByIdAndRemove(request.params.id)
         response.status(204).end()
     }

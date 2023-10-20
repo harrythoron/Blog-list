@@ -6,6 +6,7 @@ const getToken = (request, response, next) => {
     if (authorization && authorization.startsWith('Bearer ')) {
         request.token = authorization.replace('Bearer ', '')
     }
+    console.log('no authorization')
 
     next()
 }
@@ -13,10 +14,11 @@ const getToken = (request, response, next) => {
 const userExtractor = async (request, response, next) => {
     if (request.token) {
         const decodedToken = jwt.verify(request.token, process.env.SECRET)
+        console.log(decodedToken, 'decodedToken in middleware.js')
         const user = await User.findById(decodedToken.id)
         request.user = user
     }
-
+    console.log('no authorization')
     next()
 }
 const errorHandler = (error, request, response, next) => {

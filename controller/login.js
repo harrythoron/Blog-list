@@ -20,6 +20,7 @@ loginRouter.post('/', async (request, response) => {
         username: user.username,
         id: user._id
     }
+    // ^^this part is returned when jwt verify decode the token
     const token = jwt.sign(userForToken, process.env.SECRET)
 
     response

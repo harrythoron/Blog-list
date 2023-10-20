@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken')
 
 blogRouter.get('/', async (request, response) => {
     const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+    // console.log(blogs, 'blogs in blogsrouter get')
 
     response.json(blogs)
 
@@ -15,16 +16,18 @@ blogRouter.get('/', async (request, response) => {
 
 blogRouter.post('/', async (request, response) => {
     const body = request.body
+    // console.log(body, 'body in blogsRouter.js')
 
     const user = request.user
-    console.log(user, 'user from blogRouter');
+    console.log(user, 'user from blogRouter.js post method');
+    //if user is not logged in adding blog is not possible
     if (!user) {
         return response.status(401).json({ error: 'token invalid' })
     }
 
 
 
-    console.log(user.id, '   user in blogsrouter')
+    // console.log(user.id, '   user in blogsrouter')
     if (body.likes === undefined) {
         body.likes = 0
     }
@@ -39,14 +42,31 @@ blogRouter.post('/', async (request, response) => {
 
 
     const savedBlog = await blog.save()
+    console.log(savedBlog, 'savedBlog before sending to frontend blogsrouter.js')
 
     //saved the new added blog to user json
     user.blogs = user.blogs.concat(savedBlog._id)
+
     await user.save()
 
 
+    //modified blog for frontend
+    const blogFrontEnd = {
+        author: savedBlog.author,
+        id: savedBlog.id,
+        likes: savedBlog.likes,
+        title: savedBlog.title,
+        url: savedBlog.url,
+        user: {
+            id: user.id,
+            name: user.name,
+            username: user.username
+        }
+    }
 
-    response.status(201).json(savedBlog)
+    console.log(blogFrontEnd, 'changed blog for frontend sake')
+
+    response.status(201).json(blogFrontEnd)
 
 
 })

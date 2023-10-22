@@ -13,6 +13,19 @@ blogRouter.get('/', async (request, response) => {
     response.json(blogs)
 
 })
+blogRouter.get('/:id', async (request, response) => {
+
+
+    const blog = await Blog.findById(request.params.id)
+    if (blog) {
+        response.json(blog)
+    } else {
+        response.status(404).end()
+    }
+
+
+
+})
 
 blogRouter.post('/', async (request, response) => {
     const body = request.body
@@ -73,16 +86,40 @@ blogRouter.post('/', async (request, response) => {
 
 blogRouter.put('/:id', async (request, response) => {
     const body = request.body
-    console.log(body, 'blogRouter')
+    console.log(body, 'body for blog put request in blogRouter.js')
     if (body.likes === undefined) {
+        console.log('cause no likes')
         body.likes = 0
     }
 
     if (body.title === undefined || body.url === undefined) {
+        console.log('error for not having title or url')
         return response.status(400).send('Bad Request')
     }
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, body, { new: true })
-    response.json(updatedBlog)
+    const newBlog = {
+        ...body,
+
+        user: body.user.id
+
+
+    }
+    const updatedBlogFromSever = await Blog.findByIdAndUpdate(request.params.id, newBlog, { new: true })
+    console.log(updatedBlogFromSever, 'updatedblog server version')
+    const updatedBlogForFront = {
+        id: updatedBlogFromSever._id,
+        title: updatedBlogFromSever.title,
+        author: updatedBlogFromSever.author,
+        url: updatedBlogFromSever.url,
+        likes: updatedBlogFromSever.likes,
+        user: body.user
+    }
+    console.log(updatedBlogForFront, 'updatedBlogForFront frontend version')
+
+
+
+
+
+    response.json(updatedBlogForFront)
 })
 
 blogRouter.delete('/:id', async (request, response) => {

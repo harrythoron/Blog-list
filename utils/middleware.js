@@ -6,7 +6,7 @@ const getToken = (request, response, next) => {
     if (authorization && authorization.startsWith('Bearer ')) {
         request.token = authorization.replace('Bearer ', '')
     }
-    console.log('no authorization')
+
 
     next()
 }
@@ -18,7 +18,7 @@ const userExtractor = async (request, response, next) => {
         const user = await User.findById(decodedToken.id)
         request.user = user
     }
-    console.log('no authorization')
+
     next()
 }
 const errorHandler = (error, request, response, next) => {

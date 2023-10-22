@@ -124,6 +124,7 @@ blogRouter.put('/:id', async (request, response) => {
 
 blogRouter.delete('/:id', async (request, response) => {
     const blog = await Blog.findById(request.params.id)
+    console.log(blog, 'blog to delete request')
 
     const user = request.user
     console.log(user, 'user in delete blog router')

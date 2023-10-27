@@ -32,6 +32,11 @@ app.use('/api/blogs', middleware.userExtractor, blogRouter)
 app.use('/api/users', userRouter)
 app.use('/api/login', loginRouter)
 
+if (process.env.NODE_ENV === 'test') {
+    const testingRouter = require('./controller/testing')
+    app.use('/api/testing', testingRouter)
+}
+
 app.get('/', (request, response) => {
     response.send('<h1>Hiya</h1>')
 })
